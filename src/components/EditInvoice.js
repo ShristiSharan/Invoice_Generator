@@ -63,7 +63,6 @@ class EditInvoice extends React.Component {
     newItems.splice(index, 1);
     this.setState({ items: newItems });
   };
- 
   handleAddEvent(evt) {
     var id = (+ new Date() + Math.floor(Math.random() * 999999)).toString(36);
     var newItem = {
@@ -133,7 +132,6 @@ class EditInvoice extends React.Component {
   updateInvoice = (event) => {
     event.preventDefault();
     this.props.onEditInvoice({id: this.state.id, ...this.state});
-    alert("Updated")
     };
 
   
