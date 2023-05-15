@@ -27,6 +27,10 @@ function GenerateInvoice() {
 }
 
 class InvoiceModal extends React.Component {
+
+  componentDidMount() {
+    console.log(this.props, 'props');
+  }
   constructor(props) {
     super(props);
   }
@@ -37,23 +41,23 @@ class InvoiceModal extends React.Component {
           <div id="invoiceCapture">
             <div className="d-flex flex-row justify-content-between align-items-start bg-light w-100 p-4">
               <div className="w-100">
-                <h4 className="fw-bold my-2">{this.props.info.billFrom||'Shristi Sharan'}</h4>
+                <h4 className="fw-bold my-2">{this.props?.info?.billFrom||'Shristi Sharan'}</h4>
                 <h6 className="fw-bold text-secondary mb-1">
-                  Invoice #: {this.props.info.invoiceNumber||''}
+                  Invoice #: {this?.props?.info?.invoiceNumber||''}
                 </h6>
               </div>
               <div className="text-end ms-4">
                 <h6 className="fw-bold mt-1 mb-2">Amount&nbsp;Due:</h6>
-                <h5 className="fw-bold text-secondary"> {this.props.currency} {this.props.total}</h5>
+                <h5 className="fw-bold text-secondary"> {this.props?.currency} {this.props?.total}</h5>
               </div>
             </div>
             <div className="p-4">
               <Row className="mb-4">
                 <Col md={4}>
                   <div className="fw-bold">Billed to:</div>
-                  <div>{this.props.info.billTo||''}</div>
-                  <div>{this.props.info.billToAddress||''}</div>
-                  <div>{this.props.info.billToEmail||''}</div>
+                  <div>{this.props?.info.billTo||''}</div>
+                  <div>{this.props?.info.billToAddress||''}</div>
+                  <div>{this.props?.info.billToEmail||''}</div>
                 </Col>
                 <Col md={4}>
                   <div className="fw-bold">Billed From:</div>

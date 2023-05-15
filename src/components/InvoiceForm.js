@@ -8,22 +8,27 @@ import Card from 'react-bootstrap/Card';
 import InvoiceItem from './InvoiceItem';
 import InvoiceModal from './InvoiceModal';
 import InputGroup from 'react-bootstrap/InputGroup';
+import { addInvoice } from '../store/invoice.slice';
+import { connect } from 'react-redux';
+
+
 
 class InvoiceForm extends React.Component {
   constructor(props) {
     super(props);
     this.state = {
+      id: `${Math.floor(Math.random() * 999999)}`,
       isOpen: false,
       currency: '$',
       currentDate: '',
       invoiceNumber: 1,
       dateOfIssue: '',
-      billTo: '',
-      billToEmail: '',
-      billToAddress: '',
-      billFrom: '',
-      billFromEmail: '',
-      billFromAddress: '',
+      billTo: 'Shristi',
+      billToEmail: 'shristisharan05@gmail.com',
+      billToAddress: 'hhh',
+      billFrom: 'Jadu',
+      billFromEmail: 'shristisharan05@gmail.com',
+      billFromAddress: 'hhh',
       notes: '',
       total: '0.00',
       subTotal: '0.00',
@@ -35,8 +40,8 @@ class InvoiceForm extends React.Component {
     this.state.items = [
       {
         id: 0,
-        name: '',
-        description: '',
+        name: 'dhoop',
+        description: 'jjj',
         price: '1.00',
         quantity: 1
       }
@@ -44,6 +49,7 @@ class InvoiceForm extends React.Component {
     this.editField = this.editField.bind(this);
   }
   componentDidMount(prevProps) {
+    console.log(this.props.onAddInvoice, 'this.props');
     this.handleCalculateTotal()
   }
   handleRowDel(items) {
@@ -62,15 +68,17 @@ class InvoiceForm extends React.Component {
     }
     this.state.items.push(items);
     this.setState(this.state.items);
+    this.handleCalculateTotal();
   }
   handleCalculateTotal() {
+    console.log('handleCalculateTotal', this.state.items);
     var items = this.state.items;
+    console.log(items);
     var subTotal = 0;
-
     items.map(function(items) {
-      subTotal = parseFloat(subTotal + (parseFloat(items.price).toFixed(2) * parseInt(items.quantity))).toFixed(2)
+      subTotal += (items.quantity * parseFloat(items.price));
     });
-
+console.log(subTotal, 'subTotal');
     this.setState({
       subTotal: parseFloat(subTotal).toFixed(2)
     }, () => {
@@ -116,9 +124,25 @@ class InvoiceForm extends React.Component {
     this.setState(selectedOption);
   };
   openModal = (event) => {
+    // add invoice to storet
     event.preventDefault()
     this.handleCalculateTotal()
+    console.log(this.state, 'state')
     this.setState({isOpen: true})
+    this.props.onAddInvoice(this.state)
+    // try {
+
+    // // this.props.onAddInvoice("hui")
+    // setTimeout(() => {
+    // event.preventDefault()
+    // this.handleCalculateTotal()
+    // console.log(this.state, 'state')
+    // this.setState({isOpen: true})
+
+    // }, 1000);
+    // } catch (error) {
+    //   console.log(error)
+    // }
   };
   closeModal = (event) => this.setState({isOpen: false});
   render() {
@@ -127,9 +151,9 @@ class InvoiceForm extends React.Component {
         <Col md={8} lg={9}>
           <Card className="p-4 p-xl-5 my-3 my-xl-4">
             <div className="d-flex flex-row align-items-start justify-content-between mb-3">
-              <div class="d-flex flex-column">
+              <div className="d-flex flex-column">
                 <div className="d-flex flex-column">
-                  <div class="mb-2">
+                  <div className="mb-2">
                     <span className="fw-bold">Current&nbsp;Date:&nbsp;</span>
                     <span className="current-date">{new Date().toLocaleDateString()}</span>
                   </div>
@@ -245,4 +269,17 @@ class InvoiceForm extends React.Component {
   }
 }
 
-export default InvoiceForm;
+
+const mapStateToProps = (state) => ({
+  invoices: state.invoices.invoices,
+  selectedInvoice: state.selectedInvoice,
+});
+
+
+const mapDispatchToProps = (dispatch) => ({
+  onAddInvoice: (invoice) => dispatch(addInvoice(invoice)),
+});
+
+
+
+export default connect(null, mapDispatchToProps)(InvoiceForm) ;
